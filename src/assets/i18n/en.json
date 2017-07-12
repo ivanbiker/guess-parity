@@ -2,14 +2,14 @@
   "BACK_BUTTON_TEXT" : "Back",
 
   "NAME": "Name",
-  "EMAIL": "Email",
+  "EMAIL": "E-mail",
   "USERNAME": "Username",
   "PASSWORD": "Password",
   "LOGIN": "Sign in",
   "SIGNUP": "Sign up",
 
-  "TAB1_TITLE": "Items",
-  "TAB2_TITLE": "Search",
+  "TAB1_TITLE": "Games",
+  "TAB2_TITLE": "Profile",
   "TAB3_TITLE": "Settings",
 
   "MAP_TITLE": "Map",
@@ -49,9 +49,9 @@
   "SIGNUP_ERROR": "Unable to create account. Please check your account information and try again.",
   "SIGNUP_BUTTON": "Sign up",
 
-  "LIST_MASTER_TITLE": "Items",
+  "LIST_MASTER_TITLE": "Games",
 
-  "ITEM_CREATE_TITLE": "New Item",
+  "ITEM_CREATE_TITLE": "New Game",
   "ITEM_CREATE_CHOOSE_IMAGE": "Add Image",
 
   "ITEM_NAME_PLACEHOLDER" : "Name",
@@ -64,5 +64,53 @@
   "CARDS_TITLE": "Social",
 
   "SEARCH_TITLE": "Search",
-  "SEARCH_PLACEHOLDER" : "Search the items list, e.g. \"Donald Duck\""
+  "SEARCH_PLACEHOLDER" : "Search the items list, e.g. \"Donald Duck\"",
+
+  "LOADING_TITLE": "Loading",
+
+  "auth/invalid-email": "Enter a valid e-mail",
+  "auth/wrong-password": "Enter a valid password",
+  "auth/user-not-found": "User is not found",
+
+  "UNKNOWN_ERROR": "Unknown error",
+
+  "EMAIL_EXISTS": "Given e-mail is already registered",
+
+  "PROFILE_TITLE": "Profile",
+
+  "LOGOUT_BUTTON": "Sign out",
+
+  "ERROR": "Error",
+
+  "GAME_FOR": "Game for",
+
+  "GAME_FOR_PLAYERS": "players",
+
+  "PLAYERS": "players",
+
+  "GAME": "Game",
+
+  "JOIN_BUTTON": "Join",
+
+  "PLAYERS_COUNT": "Players count",
+
+  "MAKE_MOVE_BUTTOM": "Make move",
+
+  "EVEN": "Even",
+
+  "ODD": "Odd",
+
+  "NEXT_NUMBER": "Next number",
+
+  "YOUR_TURN": "Your turn",
+
+  "TURN": "Turn",
+
+  "WRONG_UNKNOWN_NUMBER_ERROR": "Enter a number for the next player",
+
+  "PICK_PARITY_ERROR": "Pick a parity",
+
+  "YOU_WIN": "You win",
+
+  "YOU_LOSE": "You lose"
 }

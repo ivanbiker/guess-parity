@@ -1,89 +1,53 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
-import { Api } from './api';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/toPromise';
+import { AngularFireAuth } from "angularfire2/auth";
+import * as firebase from 'firebase';
 
-/**
- * Most apps have the concept of a User. This is a simple provider
- * with stubs for login/signup/etc.
- *
- * This User provider makes calls to our API at the `login` and `signup` endpoints.
- *
- * By default, it expects `login` and `signup` to return a JSON object of the shape:
- *
- * ```json
- * {
- *   status: 'success',
- *   user: {
- *     // User fields your app needs, like "id", "name", "email", etc.
- *   }
- * }
- * ```
- *
- * If the `status` field is not `success`, then an error is detected and returned.
- */
+export interface ILoginInfo {
+    email: string,
+    password: string,
+}
+
+export interface ISignUpInfo extends ILoginInfo {
+    username: string,
+}
+
 @Injectable()
 export class User {
-  _user: any;
+    private user: firebase.User;
+    private stateListener: (value: firebase.User) => void;
 
-  constructor(public http: Http, public api: Api) {
-  }
+    constructor(private ngFireAuth: AngularFireAuth) {}
 
-  /**
-   * Send a POST request to our login endpoint with the data
-   * the user entered on the form.
-   */
-  login(accountInfo: any) {
-    let seq = this.api.post('login', accountInfo).share();
+    subscribe(fn: (value: firebase.User) => void) {
+        this.stateListener = user => {
+            this.user = user;
+            fn(user);
+        };
 
-    seq
-      .map(res => res.json())
-      .subscribe(res => {
-        // If the API returned a successful response, mark the user as logged in
-        if (res.status == 'success') {
-          this._loggedIn(res);
-        } else {
-        }
-      }, err => {
-        console.error('ERROR', err);
-      });
+        this.ngFireAuth.authState.subscribe(this.stateListener);
+    }
 
-    return seq;
-  }
+    login(accountInfo: ILoginInfo) {
+        return this.ngFireAuth.auth.signInWithEmailAndPassword(accountInfo.email, accountInfo.password);
+    }
 
-  /**
-   * Send a POST request to our signup endpoint with the data
-   * the user entered on the form.
-   */
-  signup(accountInfo: any) {
-    let seq = this.api.post('signup', accountInfo).share();
+    logout() {
+        return this.ngFireAuth.auth.signOut();
+    }
 
-    seq
-      .map(res => res.json())
-      .subscribe(res => {
-        // If the API returned a successful response, mark the user as logged in
-        if (res.status == 'success') {
-          this._loggedIn(res);
-        }
-      }, err => {
-        console.error('ERROR', err);
-      });
+    signup(accountInfo: ISignUpInfo) {
+        return this.ngFireAuth.auth.createUserWithEmailAndPassword(accountInfo.email, accountInfo.password);
+    }
 
-    return seq;
-  }
+    triggerOnAuthStateChanged(user: firebase.User) {
+        this.stateListener(user);
+    }
 
-  /**
-   * Log the user out, which forgets the session
-   */
-  logout() {
-    this._user = null;
-  }
+    getToken() {
+        return this.user.getIdToken();
+    }
 
-  /**
-   * Process a login/signup response to store user data
-   */
-  _loggedIn(resp) {
-    this._user = resp.user;
-  }
+    getId() {
+        return this.user.uid;
+    }
 }

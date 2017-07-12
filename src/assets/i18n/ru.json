@@ -1,12 +1,14 @@
 {
+  "BACK_BUTTON_TEXT" : "Назад",
+
   "NAME": "Имя",
   "PASSWORD": "Пароль",
-  "EMAIL": "Email",
+  "EMAIL": "E-mail",
   "LOGIN": "Вход",
   "SIGNUP": "Регистрация",
 
-  "TAB1_TITLE": "Список",
-  "TAB2_TITLE": "Поиск",
+  "TAB1_TITLE": "Игры",
+  "TAB2_TITLE": "Профиль",
   "TAB3_TITLE": "Настройки",
 
   "MAP_TITLE": "Карта",
@@ -37,12 +39,63 @@
   "SIGNUP_ERROR": "Невозможно создать учетную запись. Пожалуйста проверьте информацию о Вашей учетной записи и попробуйте еще раз.",
   "SIGNUP_BUTTON": "Регистрация",
 
-  "LIST_MASTER_TITLE": "Список",
+  "LIST_MASTER_TITLE": "Игры",
 
-  "ITEM_CREATE_TITLE": "Новый элемент",
+  "ITEM_CREATE_TITLE": "Новая игра",
   "ITEM_CREATE_CHOOSE_IMAGE": "Добавить изображение",
 
   "CARDS_TITLE": "Социальный",
 
-  "SEARCH_TITLE": "Поиск"
+  "SEARCH_TITLE": "Поиск",
+
+  "LOADING_TITLE": "Загрузка",
+
+  "DONE_BUTTON" : "Готово",
+  "CANCEL_BUTTON" : "Отмена",
+
+  "auth/invalid-email": "Введите корректный e-mail",
+  "auth/wrong-password": "Введите корректный пароль",
+  "auth/user-not-found": "Пользователь не найден",
+
+  "UNKNOWN_ERROR": "Неизвестная ошибка",
+
+  "EMAIL_EXISTS": "Данный e-mail уже зарегистрирован",
+
+  "PROFILE_TITLE": "Профиль",
+
+  "LOGOUT_BUTTON": "Выйти",
+
+  "ERROR": "Ошибка",
+
+  "GAME_FOR": "Игра для",
+
+  "GAME_FOR_PLAYERS": "игроков",
+
+  "PLAYERS": "игроки",
+
+  "GAME": "Игра",
+
+  "JOIN_BUTTON": "Присоединиться",
+
+  "PLAYERS_COUNT": "Кол-во игроков",
+
+  "MAKE_MOVE_BUTTON": "Походить",
+
+  "EVEN": "Чет",
+
+  "ODD": "Нечет",
+
+  "NEXT_NUMBER": "Следующее число",
+
+  "YOUR_TURN": "Ваш ход",
+
+  "TURN": "Ход",
+
+  "WRONG_UNKNOWN_NUMBER_ERROR": "Введите число для следующего игрока",
+
+  "PICK_PARITY_ERROR": "Выберите чет или нечет",
+
+  "YOU_WIN": "Вы победили",
+
+  "YOU_LOSE": "Вы проиграли"
 }

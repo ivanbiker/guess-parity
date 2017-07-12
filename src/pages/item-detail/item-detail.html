@@ -1,18 +1,70 @@
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>{{ item.name }}</ion-title>
-  </ion-navbar>
+    <ion-navbar>
+        <ion-title *ngIf="!game">{{ 'GAME' | translate }}</ion-title>
+        <ion-title *ngIf="game">{{ 'TURN' | translate }} #{{ game.turnsCount }}</ion-title>
+    </ion-navbar>
 
 </ion-header>
 
 
-<ion-content>
-  <div class="item-profile" text-center #profilePic [style.background-image]="'url(' + item.profilePic + ')'">
-  </div>
+<ion-content class="outer-content">
+    <div *ngIf="game">
+        <ion-list *ngIf="!game.isFinished && gameIsOn && userId === game.indexToUid[game.indexToMakeMove]">
+            <ion-list-header>
+                <ion-label>{{ 'YOUR_TURN' | translate }}</ion-label>
+            </ion-list-header>
 
-  <div class="item-detail" padding>
-    <h2>{{item.name}}</h2>
-    <p>{{item.about}}</p>
-  </div>
+            <div padding>
+                <ion-item *ngIf="game.unknownNumber !== undefined">
+                    <ion-segment [(ngModel)]="parity" [disabled]="isMakingMove">
+                        <ion-segment-button [value]="EVEN">{{ 'EVEN' | translate }}</ion-segment-button>
+                        <ion-segment-button [value]="ODD">{{ 'ODD' | translate }}</ion-segment-button>
+                    </ion-segment>
+                </ion-item>
+
+                <ion-item>
+                    <ion-input type="number" placeholder="{{ 'NEXT_NUMBER' | translate }}" [(ngModel)]="unknownNumber" [disabled]="isMakingMove"></ion-input>
+                </ion-item>
+
+                <button ion-button block icon-left (click)="makeMove()" [disabled]="isMakingMove">
+                    <ion-icon name="walk"></ion-icon>
+                    {{ 'MAKE_MOVE_BUTTON' | translate }}
+                </button>
+
+                <spinner [isVisible]="isMakingMove"></spinner>
+
+                <error [message]="errorMessage"></error>
+            </div>
+        </ion-list>
+
+        <ion-list>
+            <ion-list-header>
+                <ion-label>{{ 'PLAYERS' | translate }}: {{ game.playersJoined }} / {{ game.playersCount }}</ion-label>
+            </ion-list-header>
+
+            <ion-item *ngFor="let user of users">
+                <h2>{{ user.name }}</h2>
+
+                <div>
+                    <ion-icon class="score-icon" *ngFor="let move of user.moves" [name]="move.iconName" [color]="move.iconColor"></ion-icon>
+                </div>
+
+                <ion-spinner item-right *ngIf="gameIsOn && !game.isFinished && user.id === game.indexToUid[game.indexToMakeMove]"></ion-spinner>
+                <ion-icon name="ribbon" item-right *ngIf="game.isFinished && game.winnerId === user.id"></ion-icon>
+                <ion-badge item-end>{{ user.score }}</ion-badge>
+            </ion-item>
+
+            <div padding *ngIf="showJoinButton">
+                <button ion-button block icon-left (click)="joinGame()" [disabled]="isLoading">
+                    <ion-icon name="walk"></ion-icon>
+                    {{ 'JOIN_BUTTON' | translate }}
+                </button>
+            </div>
+
+            <spinner [isVisible]="isJoiningGame"></spinner>
+        </ion-list>
+    </div>
+
+    <spinner [isVisible]="!game"></spinner>
 </ion-content>

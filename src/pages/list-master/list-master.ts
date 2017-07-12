@@ -4,54 +4,75 @@ import { NavController, ModalController } from 'ionic-angular';
 import { ItemCreatePage } from '../item-create/item-create';
 import { ItemDetailPage } from '../item-detail/item-detail';
 
-import { Items } from '../../providers/providers';
-
-import { Item } from '../../models/item';
+import * as firebase from 'firebase';
+import * as _ from 'lodash';
+import { DATE_FORMAT, LOADING_DELAY } from "../../app/config";
+import * as moment from 'moment';
 
 @Component({
-  selector: 'page-list-master',
-  templateUrl: 'list-master.html'
+    selector: 'page-list-master',
+    templateUrl: 'list-master.html'
 })
 export class ListMasterPage {
-  currentItems: Item[];
+    currentItems: any[] = [];
+    gameIds: any = {};
 
-  constructor(public navCtrl: NavController, public items: Items, public modalCtrl: ModalController) {
-    this.currentItems = this.items.query();
-  }
+    isLoading = true;
 
-  /**
-   * The view loaded, let's query our items for the list
-   */
-  ionViewDidLoad() {
-  }
+    constructor(public navCtrl: NavController, public modalCtrl: ModalController) {
+    }
 
-  /**
-   * Prompt the user to add a new item. This shows our ItemCreatePage in a
-   * modal and then adds the new item to our data source if the user created one.
-   */
-  addItem() {
-    let addModal = this.modalCtrl.create(ItemCreatePage);
-    addModal.onDidDismiss(item => {
-      if (item) {
-        this.items.add(item);
-      }
-    })
-    addModal.present();
-  }
+    ionViewDidLoad() {
+        _.delay(() => (
+            firebase.database().ref('games').on('value', snapshot => {
+                const games = snapshot.val();
 
-  /**
-   * Delete an item from the list of items.
-   */
-  deleteItem(item) {
-    this.items.delete(item);
-  }
+                this.isLoading = false;
+                this.currentItems = [];
+                this.gameIds = {};
 
-  /**
-   * Navigate to the detail page for this item.
-   */
-  openItem(item: Item) {
-    this.navCtrl.push(ItemDetailPage, {
-      item: item
-    });
-  }
+                if (games) {
+                    for (const gameId in games) {
+                        if (games.hasOwnProperty(gameId)) {
+                            const game = games[gameId];
+
+                            this.gameIds[gameId] = true;
+
+                            this.currentItems.push({
+                                ...game,
+                                id: gameId,
+                                createdAt: moment.unix(game.createdAt).format(DATE_FORMAT),
+                                icon: (
+                                    game.playersJoined === game.playersCount
+                                        ? 'radio-button-on'
+                                        : 'radio-button-off'
+                                ),
+                                color: (
+                                    game.playersJoined === game.playersCount
+                                        ? 'primary'
+                                        : 'danger'
+                                ),
+                            });
+                        }
+                    }
+
+                    this.currentItems.reverse();
+                }
+            })
+        ), LOADING_DELAY);
+    }
+
+    addItem() {
+        const addModal = this.modalCtrl.create(ItemCreatePage);
+        addModal.onDidDismiss(gameId => {
+            if (typeof gameId === 'string' && !(gameId in this.gameIds)) {
+                this.isLoading = true;
+            }
+        });
+        addModal.present();
+    }
+
+    openItem(gameId: string) {
+        this.navCtrl.push(ItemDetailPage, {gameId});
+    }
 }

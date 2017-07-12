@@ -1,52 +1,62 @@
 import { Component } from '@angular/core';
-import { NavController, ToastController } from 'ionic-angular';
+import { NavController } from 'ionic-angular';
 
-import { MainPage } from '../../pages/pages';
-
-import { User } from '../../providers/user';
+import { SignupPage } from "../signup/signup";
+import { ILoginInfo, User } from '../../providers/user';
 
 import { TranslateService } from '@ngx-translate/core';
+import { LOADING_DELAY } from "../../app/config";
+
+import * as _ from 'lodash';
 
 
 @Component({
-  selector: 'page-login',
-  templateUrl: 'login.html'
+    selector: 'page-login',
+    templateUrl: 'login.html'
 })
 export class LoginPage {
-  // The account fields for the login form.
-  // If you're using the username field with or without email, make
-  // sure to add it to the type
-  account: { email: string, password: string } = {
-    email: 'test@example.com',
-    password: 'test'
-  };
 
-  // Our translated text strings
-  private loginErrorString: string;
+    accountInfo: ILoginInfo = {
+        email: '',
+        password: ''
+    };
 
-  constructor(public navCtrl: NavController,
-    public user: User,
-    public toastCtrl: ToastController,
-    public translateService: TranslateService) {
+    isLoading = false;
 
-    this.translateService.get('LOGIN_ERROR').subscribe((value) => {
-      this.loginErrorString = value;
-    })
-  }
+    private errors: {string: string};
 
-  // Attempt to login in through our User service
-  doLogin() {
-    this.user.login(this.account).subscribe((resp) => {
-      this.navCtrl.push(MainPage);
-    }, (err) => {
-      this.navCtrl.push(MainPage);
-      // Unable to log in
-      let toast = this.toastCtrl.create({
-        message: this.loginErrorString,
-        duration: 3000,
-        position: 'top'
-      });
-      toast.present();
-    });
-  }
+    errorMessage: string;
+
+    constructor(
+        public navCtrl: NavController,
+        public user: User,
+        public translateService: TranslateService
+    ) {
+
+        this.translateService.get([
+            'auth/invalid-email',
+            'auth/wrong-password',
+            'auth/user-not-found',
+            'UNKNOWN_ERROR',
+        ])
+            .subscribe(errors => this.errors = errors)
+        ;
+    }
+
+    doLogin() {
+        this.isLoading = true;
+        this.errorMessage = null;
+
+        _.delay(() => (
+            this.user.login(this.accountInfo)
+                .catch((e: any) => {
+                    this.errorMessage = this.errors[e.message] || this.errors[e.code] || this.errors['UNKNOWN_ERROR'];
+                })
+                .then(() => this.isLoading = false)
+        ), LOADING_DELAY);
+    }
+
+    gotoSignUp() {
+        this.navCtrl.push(SignupPage);
+    }
 }

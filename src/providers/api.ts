@@ -1,49 +1,81 @@
 import { Injectable } from '@angular/core';
-import { Http, RequestOptions, URLSearchParams } from '@angular/http';
-import 'rxjs/add/operator/map';
+import { Http, RequestOptions, URLSearchParams, Headers, RequestOptionsArgs } from '@angular/http';
+import { Observable } from 'rxjs/observable';
+import { User } from "./user";
+import { Toast } from "./toast";
 
 /**
  * Api is a generic REST Api handler. Set your API url first.
  */
 @Injectable()
 export class Api {
-  url: string = 'https://example.com/api/v1';
+    url: string = 'https://us-central1-guess-parity-backend.cloudfunctions.net';
 
-  constructor(public http: Http) {
-  }
-
-  get(endpoint: string, params?: any, options?: RequestOptions) {
-    if (!options) {
-      options = new RequestOptions();
+    constructor(public http: Http, public user: User, public toast: Toast) {
     }
 
-    // Support easy query params for GET requests
-    if (params) {
-      let p = new URLSearchParams();
-      for (let k in params) {
-        p.set(k, params[k]);
-      }
-      // Set the search field if we have params and don't already have
-      // a search field set in options.
-      options.search = !options.search && p || options.search;
+    get(endpoint: string, params?: any, customOptions?: RequestOptionsArgs) {
+        return Observable.create(observer => {
+            this.getOptions(customOptions).subscribe(options => {
+                if (!options) {
+                    options = new RequestOptions();
+                }
+
+                // Support easy query params for GET requests
+                if (params) {
+                    let p = new URLSearchParams();
+                    for (let k in params) {
+                        p.set(k, params[k]);
+                    }
+                    // Set the search field if we have params and don't already have
+                    // a search field set in options.
+                    options.search = !options.search && p || options.search;
+                }
+
+                this.http.get(this.url + '/' + endpoint, options).subscribe(res => {
+                    const jsonRes = res.json();
+
+                    if (jsonRes.code === 'success') {
+                        observer.next(jsonRes);
+                    } else if (jsonRes.code === 'error') {
+                        this.toast.show(jsonRes.message);
+                    }
+
+                    observer.complete();
+                });
+            });
+        });
     }
 
-    return this.http.get(this.url + '/' + endpoint, options);
-  }
+    post(endpoint: string, body: any, customOptions?: RequestOptionsArgs) {
+        return Observable.create(observer => {
+            this.getOptions(customOptions).subscribe(options => {
+                this.http.post(this.url + '/' + endpoint, body, options).subscribe(res => {
+                    const jsonRes = res.json();
 
-  post(endpoint: string, body: any, options?: RequestOptions) {
-    return this.http.post(this.url + '/' + endpoint, body, options);
-  }
+                    if (jsonRes.code === 'success') {
+                        observer.next(jsonRes);
+                    } else if (jsonRes.code === 'error') {
+                        this.toast.show(jsonRes.message);
+                    }
 
-  put(endpoint: string, body: any, options?: RequestOptions) {
-    return this.http.put(this.url + '/' + endpoint, body, options);
-  }
+                    observer.complete();
+                });
+            });
+        });
+    }
+    
+    private getOptions(customOptions: RequestOptionsArgs) {
+        return Observable.create(observer => {
+            this.user.getToken().then(token => {
+                const options = new RequestOptions(customOptions);
 
-  delete(endpoint: string, options?: RequestOptions) {
-    return this.http.delete(this.url + '/' + endpoint, options);
-  }
+                options.headers = new Headers();
+                options.headers.append('Authorization', `Bearer ${token}`);
 
-  patch(endpoint: string, body: any, options?: RequestOptions) {
-    return this.http.put(this.url + '/' + endpoint, body, options);
-  }
+                observer.next(options);
+                observer.complete();
+            });
+        });
+    }
 }

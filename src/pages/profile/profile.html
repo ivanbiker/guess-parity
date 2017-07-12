@@ -1,0 +1,15 @@
+<ion-header>
+
+    <ion-navbar>
+        <ion-title>{{ 'PROFILE_TITLE' | translate }}</ion-title>
+    </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+    <button ion-button outline block icon-left (click)="logout()">
+        <ion-icon name="log-out"></ion-icon>
+        {{ 'LOGOUT_BUTTON' | translate }}
+    </button>
+</ion-content>

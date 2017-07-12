@@ -1,0 +1,9 @@
+<ion-card color="danger" *ngIf="message && message.length">
+    <ion-card-header icon-left>
+        <ion-icon name="flash"></ion-icon>
+        {{ 'ERROR' | translate }}
+    </ion-card-header>
+    <ion-card-content>
+        {{ message }}
+    </ion-card-content>
+</ion-card>
