@@ -7,9 +7,19 @@
 </ion-header>
 
 
-<ion-content padding>
-    <button ion-button outline block icon-left (click)="logout()">
-        <ion-icon name="log-out"></ion-icon>
-        {{ 'LOGOUT_BUTTON' | translate }}
-    </button>
+<ion-content class="outer-content">
+    <ion-list>
+        <ion-list-header>
+            <ion-label>{{ displayName }}</ion-label>
+        </ion-list-header>
+
+        <div padding>
+            <button ion-button block icon-left (click)="logout()">
+                <ion-icon name="log-out"></ion-icon>
+                {{ 'LOGOUT_BUTTON' | translate }}
+            </button>
+        </div>
+    </ion-list>
+
+
 </ion-content>

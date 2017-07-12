@@ -50,4 +50,8 @@ export class User {
     getId() {
         return this.user.uid;
     }
+
+    getDisplayName() {
+        return this.user.displayName;
+    }
 }

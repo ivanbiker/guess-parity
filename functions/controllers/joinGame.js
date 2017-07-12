@@ -29,11 +29,11 @@ module.exports = function joinGame(req, res) {
                     return game;
                 }
 
-                game.indexToUid[game.playersJoined] = req.user.user_id;
+                game.indexToUid[game.playersJoined] = req.user.uid;
                 game.playersJoined += 1;
-                game.users[req.user.user_id] = {
+                game.users[req.user.uid] = {
                     score: 0,
-                    name: req.user.name,
+                    name: req.user.displayName,
                     turnsCount: 0,
                     moves: utils.generateInitialMoves(),
                 };

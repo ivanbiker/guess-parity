@@ -68,8 +68,8 @@ export class ItemDetailPage {
 
                 this.parity = '';
                 this.unknownNumber = '';
-                this.showJoinButton = !(this.userId in this.game.users);
                 this.gameIsOn = this.game.playersJoined === this.game.playersCount;
+                this.showJoinButton = !this.gameIsOn && !(this.userId in this.game.users);
                 this.users = [];
                 this.isMakingMove = false;
 

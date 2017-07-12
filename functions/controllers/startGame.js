@@ -23,19 +23,19 @@ module.exports = function startGame(req, res) {
         turnsCount: 0,
         createdAt: Date.now() / 1000,
         users: {
-            [req.user.user_id]: {
+            [req.user.uid]: {
                 score: 0,
-                name: req.user.name,
+                name: req.user.displayName,
                 turnsCount: 0,
                 moves: utils.generateInitialMoves(true),
             },
         },
         indexToUid: {
-            0: req.user.user_id,
+            0: req.user.uid,
         },
         indexToMakeMove: 0,
         isFinished: false,
-        creatorName: req.user.name,
+        creatorName: req.user.displayName,
     };
     const games = admin.database().ref('games');
     const gameId = games.push(game).key;

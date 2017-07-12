@@ -68,9 +68,11 @@
 
   "LOADING_TITLE": "Loading",
 
+  "auth/wrong-username": "Enter your name 3-20 characters long. Only letters and digits are allowed.",
   "auth/invalid-email": "Enter a valid e-mail",
   "auth/wrong-password": "Enter a valid password",
   "auth/user-not-found": "User is not found",
+  "auth/weak-password": "Password must be >= 6 characters",
 
   "UNKNOWN_ERROR": "Unknown error",
 
@@ -108,9 +110,5 @@
 
   "WRONG_UNKNOWN_NUMBER_ERROR": "Enter a number for the next player",
 
-  "PICK_PARITY_ERROR": "Pick a parity",
-
-  "YOU_WIN": "You win",
-
-  "YOU_LOSE": "You lose"
+  "PICK_PARITY_ERROR": "Pick a parity"
 }

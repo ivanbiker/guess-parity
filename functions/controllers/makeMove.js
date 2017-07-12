@@ -41,7 +41,7 @@ module.exports = function makeMove(req, res) {
 
         const expectedUid = game.indexToUid[game.indexToMakeMove];
 
-        if (expectedUid !== req.user.user_id) {
+        if (expectedUid !== req.user.uid) {
             return game;
         }
 
@@ -55,17 +55,17 @@ module.exports = function makeMove(req, res) {
             : 0
         ;
 
-        const userTurnsCount = game.users[req.user.user_id].turnsCount;
+        const userTurnsCount = game.users[req.user.uid].turnsCount;
 
-        game.users[req.user.user_id].moves[userTurnsCount] = game.unknownNumber === undefined
+        game.users[req.user.uid].moves[userTurnsCount] = game.unknownNumber === undefined
             ? -3
             : score
         ;
 
         game.unknownNumber = unknownNumber;
         game.turnsCount += 1;
-        game.users[req.user.user_id].score += score;
-        game.users[req.user.user_id].turnsCount += 1;
+        game.users[req.user.uid].score += score;
+        game.users[req.user.uid].turnsCount += 1;
         game.indexToMakeMove = nextIndexToMakeMove;
 
         const winnerId = getWinner(game);

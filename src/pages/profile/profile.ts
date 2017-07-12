@@ -10,7 +10,11 @@ import { Api } from "../../providers/api";
 })
 export class ProfilePage {
 
-    constructor(public user: User, public api: Api) {}
+    displayName: string;
+
+    constructor(public user: User, public api: Api) {
+        this.displayName = this.user.getDisplayName();
+    }
     
     logout() {
         this.user.logout();

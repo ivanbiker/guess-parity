@@ -36,8 +36,9 @@ export class SignupPage {
     ) {
 
         this.translateService.get([
+            'auth/wrong-username',
             'auth/invalid-email',
-            'auth/wrong-password',
+            'auth/weak-password',
             'UNKNOWN_ERROR',
         ])
             .subscribe(errors => this.errors = errors)
@@ -48,7 +49,13 @@ export class SignupPage {
         this.isLoading = true;
         this.errorMessage = null;
 
-        _.delay(() => (
+        _.delay(() => {
+            if (!/^[a-zа-я0-9]{3,20}$/i.test(this.accountInfo.username)) {
+                this.isLoading = false;
+                this.errorMessage = this.errors['auth/wrong-username'];
+                return;
+            }
+
             this.user.signup(this.accountInfo)
                 .then(user => {
                     user
@@ -60,9 +67,12 @@ export class SignupPage {
                     ;
                 })
                 .catch((e: any) => {
+                    console.log('e', e);
+
                     this.isLoading = false;
-                    this.errorMessage = this.errors[e.message] || this.errors[e.code] || this.errors['UNKNOWN_ERROR'];
+                    this.errorMessage = this.errors[e.code] || this.errors['UNKNOWN_ERROR'];
                 })
-        ), LOADING_DELAY);
+            ;
+        }, LOADING_DELAY);
     }
 }

@@ -53,9 +53,11 @@
   "DONE_BUTTON" : "Готово",
   "CANCEL_BUTTON" : "Отмена",
 
+  "auth/wrong-username": "Введите имя от 3 до 20 символов. Разрешены только буквы и цифры.",
   "auth/invalid-email": "Введите корректный e-mail",
   "auth/wrong-password": "Введите корректный пароль",
   "auth/user-not-found": "Пользователь не найден",
+  "auth/weak-password": "Длина пароля должна быть не менее 6 символов",
 
   "UNKNOWN_ERROR": "Неизвестная ошибка",
 
@@ -93,9 +95,5 @@
 
   "WRONG_UNKNOWN_NUMBER_ERROR": "Введите число для следующего игрока",
 
-  "PICK_PARITY_ERROR": "Выберите чет или нечет",
-
-  "YOU_WIN": "Вы победили",
-
-  "YOU_LOSE": "Вы проиграли"
+  "PICK_PARITY_ERROR": "Выберите чет или нечет"
 }
